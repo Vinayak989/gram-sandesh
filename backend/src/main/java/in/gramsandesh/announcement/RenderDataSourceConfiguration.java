@@ -18,15 +18,16 @@ public class RenderDataSourceConfiguration {
         String userInfo = uri.getUserInfo();
         int credentialSeparator = userInfo == null ? -1 : userInfo.indexOf(':');
         String databaseName = uri.getPath() == null ? "" : uri.getPath().replaceFirst("^/", "");
+        int port = uri.getPort() > 0 ? uri.getPort() : 5432;
 
-        if (uri.getHost() == null || uri.getPort() < 1 || credentialSeparator < 1
+        if (uri.getHost() == null || credentialSeparator < 1
                 || credentialSeparator == userInfo.length() - 1 || databaseName.isBlank()) {
-            throw new IllegalStateException("The Render Postgres connection URL is incomplete.");
+            throw new IllegalStateException("The Render Postgres connection URL is missing a host, credentials, or database name.");
         }
 
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setServerNames(new String[]{uri.getHost()});
-        dataSource.setPortNumbers(new int[]{uri.getPort()});
+        dataSource.setPortNumbers(new int[]{port});
         dataSource.setDatabaseName(databaseName);
         dataSource.setUser(userInfo.substring(0, credentialSeparator));
         dataSource.setPassword(userInfo.substring(credentialSeparator + 1));
