@@ -1,0 +1,9 @@
+{
+  "appId": "in.gramsandesh.app",
+  "appName": "ग्रामसंदेश",
+  "webDir": "dist",
+  "server": {
+    "url": "https://gram-sandesh.onrender.com",
+    "cleartext": false
+  }
+}
