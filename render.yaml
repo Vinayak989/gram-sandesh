@@ -6,7 +6,7 @@ projects:
           - type: web
             name: gram-sandesh
             runtime: docker
-            plan: 0.5c-512mb
+            plan: free
             region: singapore
             dockerfilePath: ./Dockerfile
             autoDeployTrigger: commit
@@ -23,5 +23,5 @@ projects:
         databases:
           - name: gram-sandesh-db
             databaseName: gram_sandesh
-            plan: 0.1c-256mb
+            plan: free
             region: singapore
