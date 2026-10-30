@@ -878,6 +878,105 @@ body { background: #fbf6eb; }
   .villager-detail-card { grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-areas: "head head" "village ward" "mobile mobile"; }
 }
 
+/* Android opens a compact app layout with bottom navigation; browsers keep the full web dashboard. */
+.android-app-shell { min-height: 100dvh; padding-bottom: calc(78px + env(safe-area-inset-bottom)); overflow: visible; background: #f3f6f1; }
+.android-app-shell .topbar { position: sticky; z-index: 30; top: 0; height: 66px; padding: 0 16px; color: #fff; border: 0; background: linear-gradient(115deg,#174b37,#246246); box-shadow: 0 5px 18px #103a2c24; }
+.android-app-shell .brand { gap: 9px; }
+.android-app-shell .brand-mark { width: 38px; height: 38px; border: 1px solid #ffffff36; border-radius: 12px; color: #fff4cf; background: #ffffff17; box-shadow: none; }
+.android-app-shell .brand-mark svg { width: 28px; height: 28px; }
+.android-app-shell .brand-copy strong { color: #fff; font-size: 18px; }
+.android-app-shell .brand-copy small,
+.android-app-shell .date-chip,
+.android-app-shell .top-post,
+.android-app-shell .logout-button { display: none; }
+.android-app-shell .topbar-right { gap: 8px; }
+.android-app-shell .account-pill { max-width: 112px; padding-left: 0; border: 0; text-align: right; }
+.android-app-shell .account-pill strong { max-width: 112px; color: #fff; font-size: 13px; }
+.android-app-shell .account-pill small { color: #cde2d0; font-size: 11px; }
+.android-app-shell .profile-nav-button { width: 38px; height: 38px; padding: 3px; border: 1px solid #ffffff40; border-radius: 50%; background: #ffffff19; }
+.android-app-shell .profile-nav-avatar { width: 30px; height: 30px; color: #184b37; background: #f6e5aa; }
+.android-app-shell .page-content { width: min(100%,680px); margin: 0 auto; padding: 0 15px; }
+.android-app-shell .hero,
+.android-app-shell .stats-row,
+.android-app-shell .how-it-works,
+.android-app-shell .site-footer,
+.android-app-shell .board-sidebar { display: none; }
+.android-app-shell .urgent-summary { margin-top: 14px; padding: 10px 12px; border-radius: 14px; }
+.android-app-shell .urgent-summary button { white-space: nowrap; }
+.android-app-shell .board-section { padding-top: 18px; }
+.android-app-shell .board-heading { display: grid; align-items: stretch; gap: 11px; }
+.android-app-shell .section-eyebrow { color: #77887b; font-size: 12px; }
+.android-app-shell .board-heading h2 { margin: 2px 0 0; color: #183c31; font-size: 23px; line-height: 1.35; letter-spacing: -.3px; }
+.android-app-shell .heading-spark { display: none; }
+.android-app-shell .board-heading p { display: none; }
+.android-app-shell .board-tools { width: 100%; gap: 8px; }
+.android-app-shell .search-box { min-width: 0; width: auto; height: 44px; flex: 1; border-color: #e3e9e0; border-radius: 13px; box-shadow: 0 2px 8px #284b3910; }
+.android-app-shell .search-box input { font-size: 14px; }
+.android-app-shell .board-post { min-height: 44px; height: auto; padding: 0 12px; border-radius: 13px; font-size: 13px; white-space: nowrap; }
+.android-app-shell .board-layout { margin-top: 14px; display: block; }
+.android-app-shell .board-main { width: 100%; min-width: 0; }
+.android-app-shell .board-footer { display: none; }
+.android-app-shell .complaint-disclosure { margin-top: 0; padding: 11px; border-radius: 14px; }
+.android-app-shell .announcement-grid.horizontal-updates-list { padding-top: 3px; }
+.android-app-shell .announcement-grid.horizontal-updates-list .announcement-card { min-height: 0; padding: 14px; border-radius: 16px; box-shadow: 0 4px 14px #23432e0b; }
+.android-app-shell .announcement-grid.horizontal-updates-list .announcement-card h3 { font-size: 16px; line-height: 1.5; }
+.android-app-shell .announcement-grid.horizontal-updates-list .card-message { font-size: 14px; }
+.android-app-shell .water-schedule-panel { margin-top: 0; padding: 12px; border-radius: 16px; }
+.android-app-shell .water-schedule-heading { flex-wrap: wrap; }
+.android-app-shell .water-schedule-heading strong { font-size: 15px; }
+.android-app-shell .water-schedule-heading small { font-size: 13px; }
+.android-app-shell .water-schedule-add { margin-left: 49px; }
+.android-water-subtabs { margin-bottom: 11px; padding: 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; border: 1px solid #e1e8df; border-radius: 14px; background: #eaf0e8; }
+.android-water-subtabs button { min-width: 0; min-height: 42px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; gap: 5px; border: 0; border-radius: 10px; color: #5c6b60; background: transparent; font: inherit; font-size: 12px; font-weight: 700; }
+.android-water-subtabs button.active { color: #18523a; background: #fff; box-shadow: 0 2px 7px #214a3015; }
+.android-water-subtabs button > span { min-width: 19px; padding: 1px 5px; border-radius: 99px; color: #5e7163; background: #edf2ed; text-align: center; }
+.android-water-subtabs button > i { color: #df6046; font-size: 9px; font-style: normal; }
+.android-app-shell .water-schedule-table { min-width: 690px; font-size: 12px; }
+.android-app-shell .water-schedule-table th,
+.android-app-shell .water-schedule-table td { padding: 9px 8px; }
+.android-mobile-nav { position: fixed; z-index: 50; right: 0; bottom: 0; left: 0; min-height: calc(66px + env(safe-area-inset-bottom)); padding: 6px 5px calc(6px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); align-items: center; border-top: 1px solid #e2e9e1; background: #fffefaed; backdrop-filter: blur(16px); box-shadow: 0 -5px 20px #1e3a280d; }
+.android-mobile-nav button { position: relative; min-width: 0; min-height: 50px; padding: 3px 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 0; border-radius: 12px; color: #78847a; background: transparent; font: inherit; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.android-mobile-nav button.active { color: #1a5a3e; background: #eaf3e8; }
+.android-mobile-nav-icon { min-height: 24px; font: 22px/1 Arial,sans-serif; }
+.android-nav-badge { position: absolute; top: 0; right: max(4px,calc(50% - 23px)); min-width: 17px; height: 17px; padding: 0 4px; display: grid; place-items: center; border: 1px solid #fff; border-radius: 99px; color: #fff; background: #d9543e; font: 10px/1 Arial,sans-serif; }
+.android-more-scrim { position: fixed; z-index: 60; inset: 0; display: flex; align-items: end; justify-content: center; padding: 12px 12px calc(72px + env(safe-area-inset-bottom)); background: #10281e70; backdrop-filter: blur(3px); }
+.android-more-sheet { width: min(100%,680px); max-height: min(75dvh,640px); overflow-y: auto; padding: 16px; border: 1px solid #e6e9df; border-radius: 23px; background: #fffefa; box-shadow: 0 18px 48px #12251d35; animation: android-sheet-in .18s ease-out; }
+@keyframes android-sheet-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.android-more-heading { margin-bottom: 13px; display: flex; align-items: center; justify-content: space-between; }
+.android-more-heading > span { display: grid; gap: 1px; }
+.android-more-heading small { color: #7b8b7f; font-size: 11px; }
+.android-more-heading strong { color: #203d30; font-size: 19px; }
+.android-more-heading button { width: 34px; height: 34px; border: 0; border-radius: 50%; color: #57675b; background: #edf2eb; font-size: 21px; }
+.android-more-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.android-more-grid button { min-width: 0; min-height: 74px; padding: 9px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border: 1px solid #e9ece4; border-radius: 14px; color: #344d3e; background: #fff; font: inherit; font-size: 11px; font-weight: 700; text-align: center; }
+.android-more-grid button .category-icon { width: 28px; height: 28px; border-radius: 9px; font-size: 18px; }
+.android-more-chat,.android-more-logout { width: 100%; min-height: 43px; margin-top: 10px; padding: 0 12px; display: flex; align-items: center; gap: 9px; border: 1px solid #dbe8dd; border-radius: 12px; color: #24563c; background: #eef6ed; font: inherit; font-size: 14px; font-weight: 700; }
+.android-more-chat b { margin-left: auto; color: #b44239; font-size: 11px; }
+.android-more-logout { justify-content: center; color: #8a4a40; border-color: #f0ded7; background: #fff7f3; }
+.android-auth-page { min-height: 100dvh; padding: max(16px,env(safe-area-inset-top)) 14px max(16px,env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at 88% 0%,#d9e9d4,transparent 35%),#edf3e9; }
+.android-auth-page .auth-art { display: none; }
+.android-auth-page .auth-card { width: min(100%,480px); min-height: 0; margin: auto; padding: 22px 20px; justify-self: auto; justify-content: flex-start; border: 1px solid #e3e9df; border-radius: 23px; background: #fffefa; box-shadow: 0 15px 40px #1b422216; }
+.android-auth-page .auth-brand { margin-bottom: 18px; }
+.android-auth-page .auth-brand .brand-mark { background: #1d5b42; }
+.android-auth-page .auth-language-picker { margin: 0 0 18px; padding: 10px; border: 1px solid #e7ece3; border-radius: 13px; background: #f8faf5; font-size: 12px; }
+.android-auth-page .auth-language-picker select { min-width: 125px; max-width: 145px; min-height: 38px; }
+.android-auth-page .auth-heading { margin-bottom: 15px; }
+.android-auth-page .auth-heading h1 { font-size: 25px; }
+.android-auth-page .auth-heading p { font-size: 13px; }
+.android-auth-page .auth-mode-tabs { margin-bottom: 14px; }
+.android-auth-page .auth-form { gap: 11px; }
+.android-auth-page .auth-footer { margin: 12px auto 0; padding: 0; color: #55715e; font-size: 12px; }
+.android-auth-loading { background: #edf3e9; }
+
+@media (max-width: 380px) {
+  .android-app-shell .page-content { padding-right: 11px; padding-left: 11px; }
+  .android-app-shell .account-pill { max-width: 88px; }
+  .android-app-shell .account-pill strong { max-width: 88px; }
+  .android-app-shell .board-post { padding: 0 8px; font-size: 12px; }
+  .android-mobile-nav button { font-size: 9px; }
+  .android-more-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
 @media (max-width: 420px) {
   .board-sidebar .category-pill { min-height: 40px; padding: 7px; font-size: 13px; }
   .board-sidebar .category-icon { width: 18px; height: 18px; }

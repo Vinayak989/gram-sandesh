@@ -253,6 +253,7 @@ async function resizePhotoToJpeg(file) {
 }
 
 function App() {
+  const isAndroidApp = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("app") === "android";
   const [authUser, setAuthUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState("");
@@ -298,12 +299,12 @@ function App() {
     }
   }
 
-  if (authLoading) return <div className="auth-loading"><span className="spinner" /> ग्रामसंदेश उघडत आहे...</div>;
-  if (!authUser) return <AuthPage onAuthenticated={setAuthUser} initialError={authError} language={language} onLanguageChange={setLanguage} />;
-  return <VillageApp authUser={authUser} onLogout={logout} onProfileUpdated={setAuthUser} language={language} />;
+  if (authLoading) return <div className={`auth-loading ${isAndroidApp ? "android-auth-loading" : ""}`}><span className="spinner" /> ग्रामसंदेश उघडत आहे...</div>;
+  if (!authUser) return <AuthPage onAuthenticated={setAuthUser} initialError={authError} language={language} onLanguageChange={setLanguage} isAndroidApp={isAndroidApp} />;
+  return <VillageApp authUser={authUser} onLogout={logout} onProfileUpdated={setAuthUser} language={language} isAndroidApp={isAndroidApp} />;
 }
 
-function AuthPage({ onAuthenticated, initialError, language, onLanguageChange }) {
+function AuthPage({ onAuthenticated, initialError, language, onLanguageChange, isAndroidApp }) {
   const [mode, setMode] = useState("login");
   const [selectedRole, setSelectedRole] = useState("VILLAGER");
   const [busy, setBusy] = useState(false);
@@ -360,7 +361,7 @@ function AuthPage({ onAuthenticated, initialError, language, onLanguageChange })
   }
 
   return (
-    <main className="auth-page">
+    <main className={`auth-page ${isAndroidApp ? "android-auth-page" : ""}`}>
       <div className="auth-art" aria-hidden="true"><span className="auth-sun">☼</span><span className="auth-hill auth-hill-one" /><span className="auth-hill auth-hill-two" /><span className="auth-home">⌂</span><span className="auth-art-label">आपलं गाव · आपली माहिती</span></div>
       <section className="auth-card">
         <a className="brand auth-brand" href="#top">
@@ -515,12 +516,13 @@ function VoiceInput({ children, language, multiline = false }) {
   );
 }
 
-function VillageApp({ authUser, onLogout, onProfileUpdated, language }) {
+function VillageApp({ authUser, onLogout, onProfileUpdated, language, isAndroidApp }) {
   const [announcements, setAnnouncements] = useState(() => readAnnouncementCache());
   const [complaints, setComplaints] = useState([]);
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [waterTab, setWaterTab] = useState("REGULAR");
   const [boardTab, setBoardTab] = useState("updates");
+  const [isMoreNavOpen, setIsMoreNavOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isWaterForm, setIsWaterForm] = useState(false);
@@ -536,6 +538,16 @@ function VillageApp({ authUser, onLogout, onProfileUpdated, language }) {
   const [notice, setNotice] = useState("");
   const [unreadChatCount, setUnreadChatCount] = useState(0);
   const isAdmin = authUser.role === "ADMIN";
+
+  function navigateAndroid(tab, category = "ALL") {
+    setIsMoreNavOpen(false);
+    setSearch("");
+    if (tab === "updates") {
+      setActiveCategory(category);
+      if (category === "WATER") setWaterTab("REGULAR");
+    }
+    setBoardTab(tab);
+  }
 
   const loadChatUnreadCount = useCallback(async () => {
     try {
@@ -817,7 +829,7 @@ function VillageApp({ authUser, onLogout, onProfileUpdated, language }) {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isAndroidApp ? "android-app-shell" : ""}`}>
       <header className="topbar">
         <a className="brand" href="#top" aria-label="ग्रामसंदेश मुख्यपृष्ठ">
           <span className="brand-mark" aria-hidden="true">
@@ -997,6 +1009,11 @@ function VillageApp({ authUser, onLogout, onProfileUpdated, language }) {
           </nav>
           <div className="board-main">
 
+          {isAndroidApp && boardTab === "updates" && activeCategory === "WATER" && <div className="android-water-subtabs" role="group" aria-label="पाणी वेळापत्रक प्रकार">
+            <button type="button" className={waterTab === "REGULAR" ? "active" : ""} onClick={() => setWaterTab("REGULAR")} aria-pressed={waterTab === "REGULAR"}>ठरलेले वेळापत्रक <span>{currentWaterSchedules.length.toLocaleString(getIntlLocale())}</span></button>
+            <button type="button" className={waterTab === "CHANGE" ? "active" : ""} onClick={() => setWaterTab("CHANGE")} aria-pressed={waterTab === "CHANGE"}>वेळेत बदल <span>{visibleWaterChangeCount > 99 ? "९९+" : visibleWaterChangeCount.toLocaleString(getIntlLocale())}</span>{visibleWaterChangeCount > 0 && <i aria-label="नवीन बदल सूचना">●</i>}</button>
+          </div>}
+
           {boardTab === "complaints" && (
             <div className="complaint-disclosure">
               <span className="disclosure-icon">✎</span>
@@ -1089,12 +1106,65 @@ function VillageApp({ authUser, onLogout, onProfileUpdated, language }) {
         <a href="#top">वर जा ↑</a>
       </footer>
 
+      {isAndroidApp && <AndroidMobileNavigation boardTab={boardTab} activeCategory={activeCategory} unreadChatCount={unreadChatCount} moreOpen={isMoreNavOpen} onSelect={(destination) => destination === "more" ? setIsMoreNavOpen((open) => !open) : navigateAndroid(destination.tab, destination.category)} />}
+      {isAndroidApp && isMoreNavOpen && <AndroidMoreMenu isAdmin={isAdmin} unreadChatCount={unreadChatCount} onNavigate={navigateAndroid} onClose={() => setIsMoreNavOpen(false)} onLogout={onLogout} />}
+
       {isFormOpen && (isWaterForm ? (
         <WaterScheduleForm key={`water-${editingAnnouncement?.id ?? "new"}`} initialAnnouncement={editingAnnouncement} defaultWaterUpdateType={newWaterUpdateType} onClose={closeAnnouncementForm} onSubmit={(event) => submitAnnouncement(event, editingAnnouncement)} isSaving={isSaving} language={language} />
       ) : (
         <AnnouncementForm key={`announcement-${editingAnnouncement?.id ?? "new"}`} initialAnnouncement={editingAnnouncement} defaultCategory={newAnnouncementCategory} onClose={closeAnnouncementForm} onSubmit={(event) => submitAnnouncement(event, editingAnnouncement)} isSaving={isSaving} language={language} />
       ))}
       {isComplaintFormOpen && <ComplaintForm onClose={() => setIsComplaintFormOpen(false)} onSubmit={submitComplaint} isSaving={isComplaintSaving} language={language} />}
+    </div>
+  );
+}
+
+function AndroidMobileNavigation({ boardTab, activeCategory, unreadChatCount, moreOpen, onSelect }) {
+  const destinations = [
+    { id: "updates", label: "गाव फलक", icon: "▤", selected: boardTab === "updates" && activeCategory !== "WATER", destination: { tab: "updates", category: "ALL" } },
+    { id: "water", label: "पाणी", icon: "◒", selected: boardTab === "updates" && activeCategory === "WATER", destination: { tab: "updates", category: "WATER" } },
+    { id: "complaints", label: "तक्रारी", icon: "✎", selected: boardTab === "complaints", destination: { tab: "complaints" } },
+    { id: "chat", label: "चॅट", icon: "✉", selected: boardTab === "chat", destination: { tab: "chat" } },
+    { id: "more", label: "अधिक", icon: "•••", selected: moreOpen || ["schemes", "villagers", "password", "profile"].includes(boardTab), destination: "more" },
+  ];
+
+  return (
+    <nav className="android-mobile-nav" aria-label="मुख्य नेव्हिगेशन">
+      {destinations.map((item) => (
+        <button key={item.id} type="button" className={item.selected ? "active" : ""} aria-current={item.selected ? "page" : undefined} onClick={() => onSelect(item.destination)}>
+          <span className="android-mobile-nav-icon" aria-hidden="true">{item.icon}</span>
+          <span>{item.label}</span>
+          {item.id === "chat" && unreadChatCount > 0 && <b className="android-nav-badge">{unreadChatCount > 99 ? "९९+" : unreadChatCount.toLocaleString(getIntlLocale())}</b>}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function AndroidMoreMenu({ isAdmin, unreadChatCount, onNavigate, onClose, onLogout }) {
+  const destinations = [
+    ...categories.filter((category) => !["ALL", "WATER"].includes(category.key)).map((category) => ({ id: category.key, label: category.label, icon: category.icon, tone: category.color, tab: "updates", category: category.key })),
+    { id: "schemes", label: "शासकीय योजना", icon: "▦", tone: "amber", tab: "schemes" },
+    ...(!isAdmin ? [{ id: "profile", label: "माझं प्रोफाइल", icon: "♙", tone: "violet", tab: "profile" }] : [
+      { id: "villagers", label: "गावकरी माहिती", icon: "♙", tone: "violet", tab: "villagers" },
+      { id: "password", label: "पासवर्ड बदला", icon: "⚿", tone: "rose", tab: "password" },
+    ]),
+  ];
+
+  return (
+    <div className="android-more-scrim" onClick={onClose}>
+      <section className="android-more-sheet" role="dialog" aria-modal="true" aria-labelledby="android-more-title" onClick={(event) => event.stopPropagation()}>
+        <div className="android-more-heading"><span><small>ग्रामसंदेश</small><strong id="android-more-title">अधिक पर्याय</strong></span><button type="button" onClick={onClose} aria-label="बंद करा">×</button></div>
+        <div className="android-more-grid">
+          {destinations.map((item) => (
+            <button key={item.id} type="button" onClick={() => onNavigate(item.tab, item.category)}>
+              <span className={`category-icon tone-${item.tone}`} aria-hidden="true">{item.icon}</span><span>{item.label}</span>
+            </button>
+          ))}
+        </div>
+        <button type="button" className="android-more-chat" onClick={() => onNavigate("chat")}><span aria-hidden="true">✉</span> प्रशासकाशी चॅट {unreadChatCount > 0 && <b>{unreadChatCount.toLocaleString(getIntlLocale())} नवीन</b>}</button>
+        <button type="button" className="android-more-logout" onClick={onLogout}>बाहेर पडा</button>
+      </section>
     </div>
   );
 }

@@ -3,7 +3,7 @@
   "appName": "ग्रामसंदेश",
   "webDir": "dist",
   "server": {
-    "url": "https://gram-sandesh.onrender.com",
+    "url": "https://gram-sandesh.onrender.com/?app=android",
     "cleartext": false
   }
 }
